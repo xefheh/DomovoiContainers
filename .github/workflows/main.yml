@@ -11,7 +11,10 @@ on:
 jobs:
   pull_projects:
     runs-on: ubuntu-latest
-    
+
+    permissions:
+      contents: write  # Добавляем права на запись в репозиторий
+
     steps:
       - name: Checkout Repositories
         uses: actions/checkout@v3
@@ -30,6 +33,5 @@ jobs:
           else
             git commit -m "Обновление проектов до последних коммитов $current_time"
             git push
-          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
