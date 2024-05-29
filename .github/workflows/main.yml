@@ -25,7 +25,11 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           current_time=$(TZ='Etc/GMT-5' date +"%Y-%m-%d %H:%M:%S %Z")
           git add .
-          git commit -m "Обновление проектов до последних коммитов $current_time"
-          git push
+          if git diff --cached --exit-code > /dev/null; then
+            echo "No changes to commit"
+          else
+            git commit -m "Обновление проектов до последних коммитов $current_time"
+            git push
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
