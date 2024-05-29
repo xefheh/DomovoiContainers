@@ -1,0 +1,6 @@
+[submodule "Domovoi.Backend"]
+	path = Domovoi.Backend
+	url = https://github.com/NikitaVologin/DomovoiBackend
+[submodule "Domovoi.Frontend"]
+	path = Domovoi.Frontend
+	url = https://github.com/NikitaVologin/DomovoiFrontend
