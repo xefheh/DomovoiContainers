@@ -20,7 +20,7 @@ jobs:
 
       - name: Pull submodules
         run: |
-          git submodule update --remote --merge
+          git submodule foreach 'git fetch origin main && git checkout main && git pull origin main'
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
           current_time=$(TZ='Etc/GMT-5' date +"%Y-%m-%d %H:%M:%S %Z")
