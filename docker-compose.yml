@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  domovoi.db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=Domovoi
+    ports:
+      - "5432:5432"
+    networks:
+      - domovoi_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d domovoi-main"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  domovoi.backend:
+    image: domovoi.backend
+    build:
+      context: .
+      dockerfile: BackendDockerfile
+    environment:
+      - ConnectionStrings__DatabaseConnection=Host=domovoi.db;Database=domovoi-main;Username=postgres;Password=123
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8181
+      - ASPNETCORE_HTTP_PORT=8181
+    ports:
+      - "8181:8181"
+    networks:
+      - domovoi_network
+    depends_on:
+      domovoi.db:
+        condition: service_healthy
+
+  domovoi.frontend:
+    build:
+      context: .
+      dockerfile: FrontendDockerfile
+    ports:
+      - "5173:80"
+    networks:
+      - domovoi_network
+    depends_on:
+      - domovoi.backend
+
+networks:
+  domovoi_network:

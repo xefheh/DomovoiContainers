@@ -1,0 +1,18 @@
+FROM node:lts-alpine3.20
+
+WORKDIR /app
+
+COPY ./Domovoi.Frontend/package*.json .
+
+RUN npm i
+
+COPY ./Domovoi.Frontend/ .
+
+EXPOSE 80
+EXPOSE 5173
+
+RUN npm install -g serve
+
+RUN npx vite build
+
+CMD ["serve", "--single", "dist", "-l", "80"]
